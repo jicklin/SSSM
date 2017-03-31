@@ -1,0 +1,88 @@
+/*自定义dialog样式  write by hjj at 2015/07/08*/
+* {
+	font-size: 13px;
+}
+body {
+	color: #000000;
+}
+table {
+	height:100%;
+	width:100%;
+	margin: 0 0;
+	padding: 0;
+	font-size: 14px;
+}
+
+.custhead {
+	font-weight: bold;
+}
+
+table tr td{
+	border-bottom:1px solid #ccc;
+	height:28px;
+}
+
+input {
+	border: none;
+}
+
+textarea {
+	overflow: hidden;
+	border:1px solid #ccc;
+	width: 90%;
+}
+
+/*file css */
+.file {
+	width:55px;
+    padding: 4px 10px;
+    height: 10px;
+    line-height: 10px;
+    position: relative;
+    cursor: pointer;
+    color: #888;
+    background: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    display: inline;
+    font-size:12px;
+}
+
+.file input {
+    position: absolute;
+    font-size: 10px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    -moz-opacity:0;
+    cursor: pointer
+}
+
+.file:hover {
+    color: #444;
+    background: #eee;
+    border-color: #ccc;
+    text-decoration: none
+}
+
+.progress{
+display:none; 
+width:100px; 
+border:1px solid #EEEEEE; 
+height:10px;
+background:#F8F8F8;
+border-radius: 15px 15px 15px 15px; 
+} 
+#bar{ 
+display:block; 
+background:#F6B648; 
+float:left; 
+height:100%; 
+text-align:center;
+border-radius: 15px 15px 15px 15px;
+box-shadow: 0 0 2px 1px #F8d86A; /*阴影效果*/ 
+color:#000000;
+line-height:10px;
+} 

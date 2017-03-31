@@ -1,0 +1,29 @@
+table{
+	width:100%;
+	border-collapse:collapse;
+	border-spacing:0;
+	font-size:12px;
+}
+table tr td{
+	/*height:35px;*/
+	border:1px solid #909194;
+}
+table tr td div{
+	background:#E2F1FD;
+	width:100%;
+	height:100%;
+	text-align:center;
+	line-height:35px;
+}
+table.innerTable tr td.firstCol{
+	border-left-width:0;
+}
+table.innerTable tr td.lastCol{
+	border-right-width:0;
+}
+table.innerTable tr td.firstRow{
+	border-top-width:0;
+}
+table.innerTable tr td.lastRow{
+	border-bottom-width:0;
+}

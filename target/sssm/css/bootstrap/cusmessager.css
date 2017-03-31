@@ -1,0 +1,31 @@
+/*自定义消息提示框样式  write by hjj at 2015/07/01*/
+
+/*初始化状态*/
+.cusMessager {
+	position: absolute;
+	height: 130px;
+	width: 300px;
+	right: 0;
+	bottom: -130px;
+	z-index: 19999;
+}
+
+.cusMessager .panel-heading {
+	height: 35px;
+}
+
+/*关闭按钮*/
+.cusMessager .panel-heading .btn {
+	height: 34px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin-top: 0;
+	border-top-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+/*文字居中*/
+.cusMessager .panel-body {
+	text-align: center;
+}

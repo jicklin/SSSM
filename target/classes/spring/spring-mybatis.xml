@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+http://www.springframework.org/schema/tx
+http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+http://www.springframework.org/schema/aop
+http://www.springframework.org/schema/aop/spring-aop-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+    <!--自动扫描-->
+    <context:component-scan base-package="com.jiajia">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Service" />
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />
+    </context:component-scan>
+
+    <!--加载配置文件-->
+    <context:property-placeholder location="classpath:jdbc.properties" ignore-unresolvable="true"/>
+
+    <!--配置数据库连接-->
+    <!--房管数据库-->
+    <bean id="sqldataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <!-- 数据库驱动 -->
+        <property name="driverClassName" value="${sql.jdbc.driver}" />
+        <property name="url" value="${sql.jdbc.url}" />
+        <property name="username" value="${sql.jdbc.username}" />
+        <property name="password" value="${sql.jdbc.password}" />
+        <property name="dbType" value = "sqlserver" />
+        <!-- 初始化大小、最小、最大连接数 -->
+        <property name="initialSize" value="3" />
+        <property name="minIdle" value="3" />
+        <property name="maxActive" value="100" />
+        <!-- 连接等待超时时间，单位是毫秒 -->
+        <property name="maxWait" value="60000" />
+        <!-- 配置检测间隔，检测需要关闭的空闲连接 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000" />
+        <!-- 一个连接在池中的最小生存时间 -->
+        <property name="minEvictableIdleTimeMillis" value="300000" />
+        <property name="validationQuery" value="SELECT 'x'" />
+        <property name="testWhileIdle" value="true" />
+        <property name="testOnBorrow" value="false" />
+        <property name="testOnReturn" value="false" />
+        <!-- 打开PSCache，指定每个连接PSCache的大小 -->
+        <property name="poolPreparedStatements" value="true" />
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
+        <!-- 配置监控统计拦截的filters，关闭后监控界面sql无法统计 wall防止sql注入-->
+        <property name="filters" value="wall,stat" />
+    </bean>
+    <!--不动产数据库-->
+    <bean id="oracledataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <!-- 数据库驱动 -->
+        <property name="driverClassName" value="${oracle.jdbc.driver}" />
+        <property name="url" value="${oracle.jdbc.url}" />
+        <property name="username" value="${oracle.jdbc.username}_dz" />
+        <property name="password" value="${oracle.jdbc.password}" />
+        <property name="dbType" value="oracle"/>
+        <!-- 初始化大小、最小、最大连接数 -->
+        <property name="initialSize" value="3" />
+        <property name="minIdle" value="3" />
+        <property name="maxActive" value="100" />
+        <!-- 连接等待超时时间，单位是毫秒 -->
+        <property name="maxWait" value="60000" />
+        <!-- 配置检测间隔，检测需要关闭的空闲连接 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000" />
+        <!-- 一个连接在池中的最小生存时间 -->
+        <property name="minEvictableIdleTimeMillis" value="300000" />
+        <property name="validationQuery" value="SELECT 'x' FROM DUAL" />
+        <property name="testWhileIdle" value="true" />
+        <property name="testOnBorrow" value="false" />
+        <property name="testOnReturn" value="false" />
+        <!-- 打开PSCache，指定每个连接PSCache的大小 -->
+        <property name="poolPreparedStatements" value="true" />
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
+        <!-- 配置监控统计拦截的filters，关闭后监控界面sql无法统计 wall防止sql注入-->
+        <property name="filters" value="wall,stat" />
+    </bean>
+    <!--配置动态数据源-->
+    <bean id="dataSource" class="com.jiajia.util.DynamicDataSource">
+        <property name="targetDataSources">
+            <map key-type="java.lang.String">
+                <entry key="sqldataSource" value-ref="sqldataSource"/>
+                <entry key="oracledataSource" value-ref="oracledataSource"/>
+            </map>
+        </property>
+        <!--配置默认数据源-->
+        <property name="defaultTargetDataSource" ref="sqldataSource"/>
+    </bean>
+    <!--spring和mybatis整合-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <!--mybatis配置文件-->
+        <property name="configLocation" value="classpath:mybatis/sqlMapConfig.xml"/>
+        <!--mapping文件-->
+        <property name="mapperLocations">
+            <array>
+                <value>classpath:mapper/fg/*.xml</value>
+               <value>classpath:mapper/bd/*.xml</value>
+            </array>
+        </property>
+        <!-- 开启缓存支持 -->
+        <property name="configurationProperties">
+            <props>
+                <!-- 开启关键-->
+                <prop key="cacheEnabled">true</prop>
+                <!-- 查询时，关闭关联对象即时加载以提高性能 -->
+                <prop key="lazyLoadingEnabled">false</prop>
+                <!-- 设置关联对象加载的形态，此处为按需加载字段(加载字段由SQL指定)，不会加载关联表的所有字段，以提高性能 -->
+                <prop key="aggressiveLazyLoading">true</prop>
+                <!-- 对于未知的SQL查询，允许返回不同的结果集以达到通用的效果 -->
+                <prop key="multipleResultSetsEnabled">true</prop>
+                <!-- 允许使用列标签代替列名 -->
+                <prop key="useColumnLabel">true</prop>
+                <!-- 允许使用自定义的主键值(比如由程序生成的UUID 32位编码作为键值)，数据表的PK生成策略将被覆盖 -->
+                <prop key="useGeneratedKeys">true</prop>
+                <!-- 给予被嵌套的resultMap以字段-属性的映射支持 -->
+                <prop key="autoMappingBehavior">FULL</prop>
+                <!-- 对于批量更新操作缓存SQL以提高性能 -->
+                <prop key="defaultExecutorType">BATCH</prop>
+                <!-- 数据库超过25000秒仍未响应则超时 -->
+                <prop key="defaultStatementTimeout">25000</prop>
+            </props>
+        </property>
+    </bean>
+    <!--mapper扫描器-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+       <property name="basePackage" value="com.jiajia.dao.fg,com.jiajia.dao.bd"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+    </bean>
+    <!-- 配置事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    <!-- 注解方式配置事物 -->
+    <tx:annotation-driven transaction-manager="transactionManager" />
+    <!-- 拦截器方式配置事物 -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="add*" propagation="REQUIRED" />
+            <tx:method name="append*" propagation="REQUIRED" />
+            <tx:method name="insert*" propagation="REQUIRED" />
+            <tx:method name="save*" propagation="REQUIRED" />
+            <tx:method name="update*" propagation="REQUIRED" />
+            <tx:method name="modify*" propagation="REQUIRED" />
+            <tx:method name="edit*" propagation="REQUIRED" />
+            <tx:method name="delete*" propagation="REQUIRED" />
+            <tx:method name="remove*" propagation="REQUIRED" />
+            <tx:method name="repair" propagation="REQUIRED" />
+            <tx:method name="delAndRepair" propagation="REQUIRED" />
+            <tx:method name="get*" propagation="SUPPORTS" />
+            <tx:method name="find*" propagation="SUPPORTS" />
+            <tx:method name="load*" propagation="SUPPORTS" />
+            <tx:method name="search*" propagation="SUPPORTS" />
+            <tx:method name="datagrid*" propagation="SUPPORTS" />
+
+            <tx:method name="*" propagation="SUPPORTS" />
+        </tx:attributes>
+    </tx:advice>
+    <aop:config>
+        <aop:pointcut id="transactionPointcut" expression="execution(* com.jiajia.service..*impl.*(..))" />
+        <aop:advisor pointcut-ref="transactionPointcut" advice-ref="txAdvice" />
+    </aop:config>
+
+    <!--定义自动切换数据源-->
+
+    <aop:config>
+
+        <aop:aspect ref="dataSourceExchange" order="0">
+            <aop:pointcut id="dataSourcePointCut" expression="execution(* com.jiajia.service.*.*(..))"/>
+            <aop:before method="before" pointcut-ref="dataSourcePointCut"/>
+            <aop:after method="after" pointcut-ref="dataSourcePointCut"/>
+        </aop:aspect>
+    </aop:config>
+
+
+
+</beans>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <!-- 数据库驱动包位置 -->
+   <!-- <classPathEntry location="E:\Workspaces\MyEclipse 2016 CI\FQuery\libs\sqljdbc4.jar" />-->
+    <classPathEntry location="F:\Workspaces\FQuery-工程\FQuery-平原\WebRoot\WEB-INF\lib\ojdbc14.jar" />
+    <context id="DB2Tables" targetRuntime="MyBatis3">
+        <commentGenerator>
+            <property name="suppressAllComments" value="true" />
+        </commentGenerator>
+        <!-- 数据库链接URL、用户名、密码 -->
+       <!-- <jdbcConnection driverClass="com.microsoft.sqlserver.jdbc.SQLServerDriver" connectionURL="jdbc:sqlserver://127.0.0.1:1433;databaseName=cqcj" userId="sa" password="123">-->
+            <jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver" connectionURL="jdbc:oracle:thin:@127.0.0.1:1521:orcl" userId="estate_dz" password="estate">
+        </jdbcConnection>
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+        <!-- 生成模型的包名和位置 -->
+       <!-- <javaModelGenerator targetPackage="com.jiajia.entity.fg" targetProject="E:\ideaWorkspaces\SSSM\src\main\java">-->
+        <javaModelGenerator targetPackage="com.jiajia.entity.bd" targetProject="E:\ideaWorkspaces\SSSM\src\main\java">
+            <property name="enableSubPackages" value="true" />
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+        <!-- 生成的映射文件包名和位置 -->
+        <!--<sqlMapGenerator targetPackage="mapper.fg" targetProject="E:\ideaWorkspaces\SSSM\src\main\resources">-->
+        <sqlMapGenerator targetPackage="mapper.bd" targetProject="E:\ideaWorkspaces\SSSM\src\main\resources">
+            <property name="enableSubPackages" value="true" />
+        </sqlMapGenerator>
+        <!-- 生成DAO的包名和位置 -->
+      <!--  <javaClientGenerator type="XMLMAPPER" targetPackage="com.jiajia.dao.fg" targetProject="E:\ideaWorkspaces\SSSM\src\main\java">-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.jiajia.dao.bd" targetProject="E:\ideaWorkspaces\SSSM\src\main\java">
+            <property name="enableSubPackages" value="true" />
+        </javaClientGenerator>
+        <!-- 要生成那些表(更改tableName和domainObjectName就可以) -->
+        <table tableName="CFK" domainObjectName="Cfk" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+        <table tableName="recandappform" domainObjectName="Recandappform" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+        <!-- <table tableName="course_info" domainObjectName="CourseInfo" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+        <table tableName="course_user_info" domainObjectName="CourseUserInfo" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" /> -->
+    </context>
+</generatorConfiguration>

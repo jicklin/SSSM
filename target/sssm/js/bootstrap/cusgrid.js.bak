@@ -1,0 +1,669 @@
+/*******************************************************************************
+ * @desc 生成基于bootstrap样式的自定义表格
+ * @author hjj
+ * @date 2015/06/26
+ */
+
+(function($) {
+	
+	//table JQ对象
+	var table;
+	
+	//获取数据的地址
+	var url;
+	
+	//传递到后台的参数
+	var data;
+	
+	//自定义列
+	var columns;
+	
+	//查询关键字,一般为id
+	var searchKey;
+	
+	//id字段
+	var fieldId;
+	
+	//对话框的路径
+	var dialogUrl;
+	
+	//删除对象的路径
+	var deleteUrl;
+	
+	//是否为单选
+	var singleSelect = true;
+	
+	//本页面所在iframe的下标
+	var ifmNum = getQueryString("ifmNum");
+	
+	var totalPage;
+	
+	$.fn.extend( {
+
+		
+		/***
+		 * @function 自定义表格核心方法
+		 */
+		custable : function( action , options ) {
+		
+			//实际参数个数
+			var argsnum = arguments.length;
+			
+			//期望参数个数
+			var expargsnum = $.fn.custable.length;
+			
+			//若个数不等
+			if( expargsnum > argsnum) {
+				
+				if( $.type(arguments[0]) == "object" ) {
+					options = arguments[0];
+					action = null;
+				} else {
+					action = arguments[0];
+					options = null;
+				}
+			}
+			//alert(action+","+options);
+		
+			table = $(this);
+			
+			if( options ) {
+				
+				//添加正在加载动画
+				//$.loader("show",{"cusMsg" : "请等待...","cusSize" : "sm"});
+				
+				var params	= 		options.params;
+				var addTools= 		options.addTools;
+				var toolsBtn;
+				
+				url 		= 		options.url;
+				columns 	= 		options.columns;
+				fieldId		= 		options.fieldId;
+				searchKey 	= 		options.searchKey;
+				dialogUrl 	= 		options.dialogUrl;
+				deleteUrl	=		options.deleteUrl;
+				
+				if( options.singleSelect ) {
+					singleSelect = options.singleSelect;
+				}
+				
+				if( options.toolsBtn ) {
+					
+					toolsBtn = options.toolsBtn;
+					
+				} else {
+					toolsBtn = [ {
+						icon : 'glyphicon glyphicon-plus',
+						text : '添加',
+						type : 'button',
+						handler : function(){addObj();}
+					}, {
+						icon : 'glyphicon glyphicon-minus',
+						text : '删除',
+						type : 'button',
+						handler : function(){delObj();}
+					}, {
+						icon : 'glyphicon glyphicon-pencil',
+						text : '修改',
+						type : 'button',
+						handler : function(){editObj();}
+					} ];
+				}
+				
+				if( addTools ) {
+					$.merge(toolsBtn,addTools);
+				}
+				
+				//添加当前页的隐藏input
+				if( !$("#curpage").length > 0 ) {
+					$(document.body).append("<input type='hidden' id='curpage' value='1'></input>");
+				}
+				
+				//添加每页显示数量的隐藏input
+				if( !$("#rows").length > 0 ) {
+					$(document.body).append("<input type='hidden' id='rows' value='20'></input>");
+				}
+				
+				//传递到后台的数据对象
+				data = {"page" : $("#curpage").val(), "rows" : $("#rows").val()};
+				
+				//若有自定义的参数要传递,则添加
+				if( params ) {
+					for( var pIndex in params ) {
+						data[pIndex] = params[pIndex];
+					}
+				}
+				
+				getData();
+				
+				//给表格添加bootstrap的布局
+				table.wrap("<div class='container-fluid'></div>");
+
+				//添加bootstrap样式
+				table.addClass("table table-striped table-hover custab");
+
+				//添加工具栏
+				table.before("<nav id='tools' class='navbar navbar-default' role='navigation' ></nav>");
+
+				var tools = $("#tools");
+
+				//工具栏添加bootstrap组件
+				tools.append("<div class='navbar-header'>"
+								+ "<button type='button' class='navbar-toggle' data-toggle='collapse' data-target='#toolsBtn'>"
+								+ "<span class='sr-only'>Toggle navigation</span>"
+								+ "<span class='icon-bar'></span>"
+								+ "<span class='icon-bar'></span>"
+								+ "<span class='icon-bar'></span>"
+								+ "</button>"
+								+ "<a class='navbar-brand' href='#'><span class='glyphicon glyphicon-wrench'></span> <b>tools</b></a>"
+								+ "</div>"
+
+								+ "<div class='collapse navbar-collapse' id='toolsBtn'>"
+								+ "</div>");
+				
+				//设置自定义工具栏按钮
+				if( toolsBtn ) {
+					
+					for( var tIndex in toolsBtn ) {
+						
+						var toolsBtn_item = toolsBtn[tIndex];
+						if( toolsBtn_item.type == "button" ) {
+							if( !$("#toolsBtn ul").length > 0 ) {
+								$("#toolsBtn").append("<ul class='nav navbar-nav'></ul>");
+							}
+							//alert(toolsBtn_item.handler);
+							$("#toolsBtn ul.nav").append("<li><a href='#'><i class='" + toolsBtn_item.icon + "'></i> " + toolsBtn_item.text + "</a></li>");
+							$("#toolsBtn ul.nav").children("li:last-child").click(toolsBtn_item.handler);
+						}
+						
+						
+						
+						if (toolsBtn_item.type == "search") {
+							$("#toolsBtn").append("<div class='input-group pull-right' style='width:300px;margin-top:11px'>"
+													+ "<div class='input-group-btn'>"
+													+ "<button type='button' class='btn btn-default dropdown-toggle btn-sm' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><b>筛选字段:  </b><span class='caret'></span></button>"
+													+ "<ul class='dropdown-menu selectVal'>"
+													+ "<li key='all'><a href='#'>全部</a></li>"
+													+ "<li role='separator' class='divider'></li>"
+													+ "</ul>"
+													+ "</div>"
+													+ "<input id='inputVal' type='text' class='form-control input-sm'>"
+													+ "<div class='input-group-btn'>"
+													+ "<button id='searchBtn' type='button' class='btn btn-default btn-sm'><b><i class='glyphicon glyphicon-search'></i> 搜索</b></button>"
+													+ " </div></div>");
+							
+							//查询功能实现
+							var selBarOptions = toolsBtn_item.selBarOptions;
+							for( var sbIndex in selBarOptions) {
+								var selBarOptions_item = selBarOptions[sbIndex];
+								//alert(selBarOptions_item.text);
+								$("#toolsBtn .input-group .selectVal").append("<li key='" + selBarOptions_item.value + "'><a href='#'>" +  selBarOptions_item.text + "</a></li>");
+							}
+							
+							var liChange = false;
+							var selectVal;
+							var $input = $("#toolsBtn .input-group input");
+							
+							$("#toolsBtn .input-group .selectVal li").click(function() {
+								
+								var $li = $(this);
+								if( $li.attr("key")=="all" ) {
+									$input.val("");
+									$("#toolsBtn .input-group .dropdown-toggle b").text("筛选字段:");
+									delete data.inputVal;
+									delete data.selectVal;
+									getData();
+								} else {
+									$("#toolsBtn .input-group .dropdown-toggle b").text($li.text() + ":");
+									liChange = true;
+									selectVal = $li.attr("key");
+								}
+								
+							});
+							
+							$("#toolsBtn .input-group #searchBtn").click(function() {
+								if( liChange && $input.val() != "") {
+									
+									data.inputVal = $input.val();
+									data.selectVal = selectVal;
+									getData();
+									
+								} else {
+									$.cusalert({"title":"警告","content":"请输入必要的信息","type":"warning"});
+								}
+								
+							});
+						}
+						
+					}
+					
+				}
+				
+				//添加分页
+				table.after("<!--[if lt IE 9]><script src='../js/bootstrap/respond.js'></script>"
+								+ "<![endif]-->"
+								+ "<nav id='page' class='navbar navbar-default navbar-fixed-bottom' role='navigation'></nav>");
+
+				var page = $("#page");
+
+				//分页添加bootstrap组件
+				page.append("<div class='navbar-header'>"
+								+ "<button type='button' class='navbar-toggle' data-toggle='collapse' data-target='#bs-example-navbar-collapse-2'>"
+								+ "<span class='sr-only'>Toggle navigation</span>"
+								+ "<span class='icon-bar'></span>"
+								+ "<span class='icon-bar'></span>"
+								+ "<span class='icon-bar'></span>"
+								+ "</button>"
+								+ "<a class='navbar-brand' href='#'><span class='glyphicon glyphicon-leaf'></span> <b>page</b></a>"
+								+ "</div>"
+
+								+ "<div class='collapse navbar-collapse' id='bs-example-navbar-collapse-2'>"
+								+ "<ul class='nav navbar-nav'>"
+								+ "<li class='dropup'>"
+								+ "<a href='##' data-toggle='dropdown' class='dropdown-toggle' id='seeRow'><i class='glyphicon glyphicon-tag'></i> <b id='seeNum'>20</b><b class='caret'></b></a>"
+								+ "<ul class='dropdown-menu' role='menu' aria-labelledby='pagetotal' id='seeRowMenu'>"
+								+ "<li role='presentation'><a href='##'>20</a></li>"
+								+ "<li role='presentation'><a href='##'>50</a></li>"
+								+ "<li role='presentation'><a href='##'>100</a></li>"
+								+ "</ul>"
+								+ "</li>"
+								+ "<li><a href='#' id='firstPage'><i class='glyphicon glyphicon-fast-backward'></i> 首页</a></li>"
+								+ "<li><a href='#' id='prePage'><i class='glyphicon glyphicon-backward'></i> 上一页</a></li>"
+								+ "<li><a href='#' id='nextPage'><i class='glyphicon glyphicon-forward'></i> 下一页</a></li>"
+								+ "<li><a href='#' id='lastPage'><i class='glyphicon glyphicon-fast-forward'></i> 末页</a></li>"
+								+ "<li><a href='#' id='reload'><i class='glyphicon glyphicon-refresh'></i> 刷新</a></li>"
+								+ "<li><input type='text' id='seeCurPage'></input></li>"
+								+ "<li><a href='#' id='toPage'><span class='glyphicon glyphicon-send'></span> <b>GO</b></a>"
+								+ "	</li>" + "</ul>" + "</div>");
+				
+				//加载完毕,关闭载入动画
+				//var timeout = setTimeout("$.loader('hide');",500);
+				
+				$("#reload").click(function() {
+					
+					table.find("tbody").remove();
+					getData();
+					
+				});
+				
+				$("#seeRowMenu").find("li").click(function() {
+					var value = $(this).text();
+					$("#rows").val(value);
+					$("#seeRow").find("#seeNum").text(value);
+					data.rows = $("#rows").val();
+					getData();
+				});
+				
+				$("#firstPage").click(function() {
+					$("#curpage").val(1);
+					data.page = $("#curpage").val();
+					getData();
+				});
+				
+				$("#lastPage").click(function() {
+					$("#curpage").val(totalPage);
+					data.page = $("#curpage").val();
+					getData();
+				});
+				
+				$("#nextPage").click(function() {
+					
+					var curPage = Number($("#curpage").val());
+					
+					if( curPage + 1 > totalPage ) {
+						$.cusalert({
+							title : "警告",
+							content: "已经是最后一页",
+							type : "warning"
+						});
+					} else {
+						$("#curpage").val( ++curPage );
+						data.page = $("#curpage").val();
+						getData();
+					}
+					
+				});
+				
+				$("#prePage").click(function() {
+					
+					var curPage = Number($("#curpage").val());
+					
+					if( curPage == 1 ) {
+						$.cusalert({
+							title : "警告",
+							content: "已经是第一页",
+							type : "warning"
+						});
+					} else {
+						$("#curpage").val( --curPage );
+						data.page = $("#curpage").val();
+						getData();
+					}
+					
+				});
+				
+				$("#toPage").click(function() {
+					
+					var inputPage = Number($("#seeCurPage").val());
+					var re = /^[0-9]+.?[0-9]*$/;
+					
+					if( inputPage > totalPage ) {
+						$.cusalert({
+							"title" : "警告",
+							"content" : "请输入小于" + totalPage + "的数",
+							"type" : "warning"
+						});
+					} else if( !re.test(inputPage) ) {
+						
+						$.cusalert({
+							"title" : "警告",
+							"content" : "请输入数字",
+							"type" : "warning"
+						});
+						
+					} else if( !inputPage > 0 ) {
+						
+						$.cusalert({
+							"title" : "警告",
+							"content" : "请输入大于0的页码",
+							"type" : "warning"
+						});
+						
+					} else {
+						$("#curpage").val($("#seeCurPage").val());
+						data.page = $("#curpage").val();
+						getData();
+					}
+					
+				});
+			}
+			
+			if( action ) {
+				
+				if( action == "reload" ) {
+					
+					table.find("tbody").remove();
+					getData();
+					
+				}
+				
+				if( action == "getSelected") {
+					
+					if( $(".selected").length == 0 ) {
+						return null;
+					} else {
+						return JSON.parse($(".selected").attr("data"));
+					}
+				}
+				
+				if( action == "getChecked") {
+					
+					if( $(".getChecked").length == 0 ) {
+						return null;
+					} else {
+						return JSON.parse($(".getChecked").attr("data"));
+					}
+					
+				}
+			}
+			
+		}
+	});
+	
+	function getData() {
+		
+		var dt = MathRand();
+		
+		//添加正在加载动画
+		$.loader("show",{"cusMsg" : "请等待...","cusSize" : "sm"});
+		
+		//跟后台交互,默认使用get方式
+		$.ajax({
+			"type" : "get",
+			"url" : url+"?dt="+dt,
+			"data" : data,
+			success : function(data) {
+				//alert(JSON.stringify(data.rows));
+				//后台默认查询出来的数据摆在rows中
+			
+				if( table.find("tbody").length > 0 ) {
+					table.find("tbody").remove();
+				}
+			
+				var rows = data.rows;
+				
+				var total = data.total;
+				
+				$("#seeCurPage").val($("#curpage").val());
+				
+				if( $("#total").length > 0 ) {
+					
+					$("#total").val(total);
+					
+				} else {
+					$(document.body).append("<input type='hidden' id='total'>");
+				}
+				
+				
+				totalPage = parseInt(total/ Number($("#rows").val()));
+				
+				if( total % Number($("#rows").val()) > 0 ) {
+					totalPage = totalPage + 1;
+				}
+				//alert(totalPage);
+				
+				var actionFlag = false;
+				
+				//遍历后台传递过来的数据
+				for( var rIndex in rows ) {
+					
+					var rows_item = rows[rIndex];
+					
+					var thStr = "";
+					
+					var trStr = "";
+					
+					//解析自定义列
+					if( columns ) {
+						for( var cIndex in columns ) {
+							var columns_item = columns[cIndex];
+							
+							//将需要添加的头部th,根据自定义参数columns进行拼接成字符串
+							if( !table.find("thead").length > 0 ) {
+								thStr = thStr + "<th class='text-center'>" + columns_item.title + "</th>";
+							}
+							/*//详细,删除操作列,若不需要可以在自定义中设置
+							if( columns_item.field != "action") {
+								trStr = trStr + "<td class='text-center'>" + rows_item[columns_item.field] + "</td>";
+							} else {
+								actionFlag = true;
+							}*/
+							
+							//添加多选框
+							if( columns_item.field == "ck" ) {
+								trStr = trStr + "<td class='text-center'><span class='glyphicon glyphicon-unchecked checkIcon'></span></td>";
+							//添加详细,删除操作列
+							} else if( columns_item.field == "action" ) {
+								actionFlag = true;
+							//普通的添加列
+							} else {
+								
+								var value = rows_item[columns_item.field];
+								
+								if( columns_item.formatter ) {
+									value = columns_item.formatter(value, rows_item, rIndex);
+								}
+								trStr = trStr + "<td class='text-center'>" + value + "</td>";
+							}
+							
+						}
+					}
+					//添加表头th
+					if( thStr != "" ) {
+						table.append("<thead><tr>" + thStr + "</tr></thead>");
+					}
+					//添加操作列
+					if( actionFlag ) {
+						trStr = trStr + "<td class='text-center'><a class='btn btn-info btn-xs detailBtn' href='#'><span class='glyphicon glyphicon-edit'></span> 详细</a> <a href='#' class='btn btn-danger btn-xs delBtn'><span class='glyphicon glyphicon-remove'></span> 删除</a></td>";
+					}
+					//添加数据行tr
+					table.append("<tr data='"+ JSON.stringify(rows_item) +"'>" + trStr + "</tr>");
+				}
+				
+				//删除操作
+				$(".delBtn").click(function() {
+					
+					var $delBtn = $(this);
+					
+					$.cusconfirm({title : "确定要删除吗"},function() {
+						
+						var selData = JSON.parse($delBtn.closest("tr").attr("data"));
+					
+						delAjax(selData[fieldId]);
+						
+				});
+					
+					
+					
+					
+				});
+				
+				//详细操作
+				$(".detailBtn").click(function() {
+					var data = JSON.parse($(this).closest("tr").attr("data"));
+					
+					var real_searchKey = {};
+					
+					if( searchKey ) {
+						for( var sIndex in searchKey ) {
+							var searchKey_item = searchKey[sIndex];
+							if( $.type(searchKey_item) == "string" ) {
+								real_searchKey[searchKey_item] = data[searchKey_item];
+							} else if( $.type(searchKey_item) == "object" ) {
+								for( var siIndex in searchKey_item ) {
+									real_searchKey[siIndex] = searchKey_item[siIndex];
+								}
+							}
+						}
+					} else {
+						real_searchKey["objid"] = data[fieldId];
+					}
+					var url = dialogUrl + "?searchKey=" + JSON.stringify(real_searchKey);
+					window.top.dialog("detail",url);
+				});
+				
+				//多选按钮监听
+				table.find("tbody tr").click(function() {
+					
+					var $tr = $(this);
+					var $checkIcon = $tr.find(".checkIcon");
+					
+					if( $checkIcon.hasClass("checked") ) {
+						$checkIcon.attr("class","glyphicon glyphicon-unchecked checkIcon");
+					} else {
+						if( singleSelect ) {
+							$(".checked").attr("class","glyphicon glyphicon-unchecked checkIcon");
+						}
+						$checkIcon.attr("class","glyphicon glyphicon-check  checkIcon checked");
+					}
+					
+					if( $tr.hasClass("selected") ) {
+						$tr.removeClass("selected");
+					} else {
+						if( singleSelect ) {
+							$(".selected").removeClass("selected");
+						}
+						$tr.addClass("selected");
+					}
+					
+				});
+				
+				setTimeout("$.loader('hide');",500);
+			},
+			error : function() {
+				alert("error!");
+			}
+		});
+		
+	}
+	
+	//产生随机数
+	function MathRand() {
+		var Num = "";
+		for ( var i = 0; i < 6; i++) {
+			Num += Math.floor(Math.random() * 10);
+		}
+		return Num;
+	}
+	
+	function addObj() {
+		
+		window.top.dialog("add",dialogUrl,ifmNum);
+		
+	}
+	
+	//点击删除按钮
+	function delObj() {
+		
+		if( $(".selected").length == 0 ) {
+			$.cusalert({
+				"title" : "错误",
+				"content" : "请选择一条数据",
+				"type"  : "WARNING"
+			});
+			
+		} else {
+			
+			$.cusconfirm({title : "确定要删除吗"},function() {
+				var selData = JSON.parse($(".selected").attr("data"));
+				delAjax(selData[fieldId]);
+			});
+			
+		}
+		
+			
+	}
+	
+	//删除ajax
+	function delAjax( objid ) {
+		
+		$.post(deleteUrl,{'objid':objid},
+				
+			function(data) {
+			   if(data.success) {
+				   $.cusalert({
+						"title" :"成功",
+						"content":"删除成功",
+						"type":"success"
+					});
+					getData();		
+			   } else {
+					$.cusalert({
+						"title" :"错误",
+						"content":data.errorMsg,
+						"type":"info"
+					});
+			   }
+		});
+		
+	}
+
+	function editObj() {
+		
+		if( $(".selected").length == 0 ) {
+			$.cusalert({
+				"title" : "错误",
+				"content" : "请选择一条数据",
+				"type"  : "WARNING"
+			});
+			
+		} else {
+			
+			var selData = JSON.parse($(".selected").attr("data"));
+			var url = dialogUrl + "?searchKey=" + JSON.stringify({"objid" : selData[fieldId]});
+			window.top.dialog("edit",url,ifmNum);
+			
+		}
+		
+	}
+})(jQuery);

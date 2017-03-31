@@ -1,0 +1,40 @@
+/*自定义左侧菜单栏样式  write by hjj at 2015/07/01*/
+/*箭头图标*/
+.cusmenu .panel-heading span {
+	margin-top: -20px;
+	font-size: 15px;
+}
+
+.cusmenu .panel,
+.cusmenu .panel-heading,
+.cusmenu .panel-body {
+	width: 100%;
+}
+
+.cusmenu .panel-heading {
+	cursor: pointer;
+}
+
+.cusmenu .panel-primary {
+	margin: 0 0;
+	/*border: none; 加边框线*/
+	border : 1px solid #dddddd;
+}
+
+.cusmenu .panel-body {
+	display: none;
+	padding: 0;
+}
+
+.cusmenu > .panel > .panel-body {
+	overflow-y : auto;
+}
+
+.cusmenu .panel-title {
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.cusmenu .myTree {
+	font-size: 13px;
+}

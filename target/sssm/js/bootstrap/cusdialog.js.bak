@@ -1,0 +1,259 @@
+/*******************************************************************************
+ * @desc 生成基于bootstrap样式的dialog
+ * @author hjj
+ * @date 2015/06/30
+ */
+
+(function($){
+
+	//控制字闪烁的
+	var control = 1;
+	
+	$.fn.extend( {
+
+		
+		/***
+		 * @function 自定义对话框核心方法
+		 */
+		cusdialog : function( action , options ) {
+			
+			//实际参数个数
+			var argsnum = arguments.length;
+			
+			//期望参数个数
+			var expargsnum = $.fn.cusdialog.length;
+		
+			//若个数不等
+			if( expargsnum > argsnum) {
+				
+				if( $.type(arguments[0]) == "object" ) {
+					options = arguments[0];
+					action = null;
+				} else {
+					action = arguments[0];
+					options = null;
+				}
+			}
+			
+			var dialog = $(this);
+			
+			//给dialog设置一些参数
+			if( options ) {
+				
+				var dialog_title = options.title;
+				
+				var dialog_content = options.content;
+				
+				var dialog_button = options.button;
+				
+				var onSubmit = options.onCusDialogSubmit;
+				
+				var width = options.width;
+				
+				var height = options.height;
+				
+				var hideBtn = false;
+				
+				if( options.hideBtn ) {
+					hideBtn = options.hideBtn;
+				}
+				
+				
+				if( onSubmit ) {
+					$.fn.cusDialogSubmit = onSubmit;
+				}
+				
+				//若有内容先清空
+				if( dialog.children().length > 0 ) {
+					dialog.children().remove();
+				}
+				
+				//添加bootstrap样式
+				dialog.addClass("modal fade");
+				
+				//添加bootstrap组件
+				dialog.append("<div class='modal-dialog'>"
+					        +"<div class='panel panel-primary'>"
+					        +"<div class='panel-heading'>"
+					        +"<a class='btn btn-primary pull-right' data-dismiss='modal'><span class='glyphicon glyphicon-remove'></span></a>"
+					        +"<h4 class='panel-title'>"+dialog_title+"</h4>"
+					        +"</div>"
+					        +"<div class='panel-body'>"+dialog_content
+					        +"</div>"
+					        +"<div class='modal-footer'>"
+					        +"<div class='btn-group'>"
+					        +"<button class='btn btn-danger' data-dismiss='modal'><span class='glyphicon glyphicon-remove'></span> 关闭</button>"
+					        +"<button id='cusSubmit' class='btn btn-primary'><span class='glyphicon glyphicon-check'></span> 提交</button>"
+					        +"</div>"
+					        +"</div>"
+					        +"</div>"
+					        +"</div>");
+				
+				if( width ) {
+					$(".modal-dialog").css("width",width);
+				}
+				
+				if( height ) {
+					$(".modal-dialog").css("height",height);
+				}
+				
+				//添加对话框的自定义按钮
+				if( dialog_button ) {
+					for( var bIndex in dialog_button ) {
+						var dialog_button_item = dialog_button[bIndex];
+						var remain = Number(bIndex)%3;
+						var button_className = "btn-info";
+						
+						if( remain == 1 ) {
+							button_className = "btn-success";
+						}
+						
+						if( remain == 2 ) {
+							button_className = "btn-default";
+						}
+						
+						$(".btn-group").prepend("<button id='"+dialog_button_item.id+"' class='btn "+button_className+"'><span class='"+dialog_button_item.icon+"'></span> "+dialog_button_item.text+"</button>");
+					}
+				}
+				
+				if( hideBtn ) {
+					$(".btn-group").css("display","none");
+				}
+				
+				dialog.modal("toggle");
+				
+				//提交事件
+				$("#cusSubmit").click(function() {
+					$.fn.cusDialogSubmit();
+					//dialog.modal("toggle");
+				});
+				
+			}
+			
+			//动作部分,比如'close',暂时还未用到,扩充内容
+			if( action ) {
+				
+				if( action == "close") {
+					//dialog.modal("toggle");
+					$(".btn-group").find("[data-dismiss='modal']").trigger("click");
+					
+				}
+				
+			}
+			
+			
+		},
+	
+		/***
+		 * @function 带有闪烁字的对话框
+		 */
+		cusFlickerDlg : function( options ) {
+			
+			var $dialog = $(this);
+			
+			var width = options.width;
+			
+			var height = options.height;
+			
+			var title = options.title;
+			
+			var content = options.content;
+			
+			var flicker = options.flicker;
+			
+			//清空dialog操作
+			if( $dialog.children().length > 0 ) {
+				$dialog.children().remove();
+			}
+			
+			//添加遮罩
+			$(document.body).append("<div id='shade'></div>");
+			
+			//添加闪烁字
+			$(document.body).append("<div id='shade-text'></div>");
+			
+			//设置遮罩的大小
+			$("#shade").height(document.body.scrollHeight);
+			$("#shade").width(document.body.scrollWidth);
+			
+			//闪烁字设置
+			$("#shade-text").text(flicker);
+			$("#shade-text").css("top",document.body.scrollHeight*4/5 + "px");
+			$("#shade-text").css("left",document.body.scrollWidth*0.43 + "px");
+			
+			//dialog设置
+			$dialog.addClass("flickerDlg");
+			$dialog.css("width",width);
+			$dialog.css("height",height);
+			var top = ($(window).height()-$dialog.height())/4;
+			var left = ($(window).width()-$dialog.width())/2;
+			$dialog.css("top",top+"px");
+			$dialog.css("left",left+"px");
+			$dialog.append("<div class='flickerDlg-header' ><b>"+ title +"</b></div>"
+					+"<div class='flickerDlg-body'>"
+					+ content
+					+"</div>");
+
+			//遮罩淡入效果
+			$("#shade").fadeTo(200, 0.5);
+
+			//对话框淡入效果
+			$dialog.fadeIn(300);
+
+			//设置闪烁是时间
+			var timer = setInterval(flash,800);
+			
+			$(document.body).click(function() {
+				//删除操作
+				$dialog.fadeOut();
+				$("#shade").fadeOut();
+				clearInterval(timer);
+				
+				var $iframe = $dialog.find("iframe");
+				
+				if( $iframe.length > 0 ) {
+					for ( var i = 0; i < $iframe.length; i++) {
+						$iframe[i].src = '';
+						$iframe[i].contentWindow.document.write('');
+						$iframe[i].contentWindow.close();
+					}
+					$iframe.remove();
+					if (navigator.userAgent.indexOf("MSIE") > 0) {// IE特有回收内存方法
+						try {
+							CollectGarbage();
+						} catch (e) {
+						}
+					}
+				}
+				$dialog.children().each(function(index,item) {
+					$(item).remove();
+				});
+				$("#shade").remove();
+				$("#shade-text").remove();
+			});
+		},
+		
+		/***
+		 * @function 提交事件,外部调用可以设置onCusDialogSubmit参数
+		 */
+		cusDialogSubmit : function() {
+			alert("提交事件,onCusDialogSubmit");
+		}
+		
+	});
+	
+	/***
+	 * @function 字闪烁
+	 */
+	function flash() {
+		
+		if (control == 1){
+			$("#shade-text").fadeIn(300);
+			control=0;
+		}else{
+			$("#shade-text").fadeOut();
+			control=1;
+		}
+		
+	}
+})(jQuery);

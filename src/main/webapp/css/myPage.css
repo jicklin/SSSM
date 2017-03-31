@@ -1,0 +1,28 @@
+#pagediv{
+  margin-top:-4px;
+  display:block;
+  height:100%;
+  background-color:#F4F4F4;
+}
+
+#pagediv table tr td input{
+  width:26px;
+  height:20px;
+}
+
+#pagediv table tr td{
+	border-right:1px solid #ccc;
+	font-size:12px;
+	font-family:sans-serif;
+}
+
+#pagediv table tr td:first-child{
+	width:60px;
+	text-align:center;
+}
+#pageTable{
+	height:50%;
+}
+#pageTable tr td img{
+	border:1px solid #ffffff;
+}

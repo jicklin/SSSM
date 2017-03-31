@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiajia.dao.bd.RecandappformMapper">
+  <resultMap id="BaseResultMap" type="com.jiajia.entity.bd.Recandappform">
+    <id column="CASENUM" jdbcType="VARCHAR" property="casenum" />
+    <result column="BUSTYPE" jdbcType="VARCHAR" property="bustype" />
+    <result column="BUSCODE" jdbcType="VARCHAR" property="buscode" />
+    <result column="SUBBUSCODE" jdbcType="VARCHAR" property="subbuscode" />
+    <result column="RECNUM" jdbcType="VARCHAR" property="recnum" />
+    <result column="RECDATE" jdbcType="DATE" property="recdate" />
+    <result column="RECMAN" jdbcType="VARCHAR" property="recman" />
+    <result column="COUNTUNIT" jdbcType="VARCHAR" property="countunit" />
+    <result column="RIGHTTYPE" jdbcType="VARCHAR" property="righttype" />
+    <result column="REGISTERTYPE" jdbcType="VARCHAR" property="registertype" />
+    <result column="REGISTERCAUSE" jdbcType="VARCHAR" property="registercause" />
+    <result column="OBLIGEENAME" jdbcType="VARCHAR" property="obligeename" />
+    <result column="OBLIGORNAME" jdbcType="VARCHAR" property="obligorname" />
+    <result column="REALESTLOCATION" jdbcType="VARCHAR" property="realestlocation" />
+    <result column="ORGREALESTCARDNUM" jdbcType="VARCHAR" property="orgrealestcardnum" />
+    <result column="PLEMODE" jdbcType="VARCHAR" property="plemode" />
+    <result column="EVAAMOUNT" jdbcType="DECIMAL" property="evaamount" />
+    <result column="PLEAMOUNT" jdbcType="DECIMAL" property="pleamount" />
+    <result column="PLERANGE" jdbcType="VARCHAR" property="plerange" />
+    <result column="PLEBEGINDATE" jdbcType="DATE" property="plebegindate" />
+    <result column="PLEENDDATE" jdbcType="DATE" property="pleenddate" />
+    <result column="EASLOCATION" jdbcType="VARCHAR" property="easlocation" />
+    <result column="EASREALESTUNITNUM" jdbcType="VARCHAR" property="easrealestunitnum" />
+    <result column="APPCARDTYPE" jdbcType="DECIMAL" property="appcardtype" />
+    <result column="APPHOLDMODE" jdbcType="DECIMAL" property="appholdmode" />
+    <result column="TRADEPRICE" jdbcType="DECIMAL" property="tradeprice" />
+    <result column="INFOMODE" jdbcType="VARCHAR" property="infomode" />
+    <result column="SURFORMNUM" jdbcType="VARCHAR" property="surformnum" />
+    <result column="APPLIDESC" jdbcType="VARCHAR" property="applidesc" />
+    <result column="REGISTERPROOF6" jdbcType="VARCHAR" property="registerproof6" />
+    <result column="REGISTERPROOF5" jdbcType="VARCHAR" property="registerproof5" />
+    <result column="REGISTERPROOF4" jdbcType="VARCHAR" property="registerproof4" />
+    <result column="REGISTERPROOF3" jdbcType="VARCHAR" property="registerproof3" />
+    <result column="REGISTERPROOF2" jdbcType="VARCHAR" property="registerproof2" />
+    <result column="REGISTERPROOF" jdbcType="VARCHAR" property="registerproof" />
+    <result column="REGISTERPROOF1" jdbcType="VARCHAR" property="registerproof1" />
+    <result column="PLEAMOUNTAREA" jdbcType="DECIMAL" property="pleamountarea" />
+    <result column="PLEAMOUNTSEQ" jdbcType="VARCHAR" property="pleamountseq" />
+    <result column="PLEAMOUNTNUM" jdbcType="VARCHAR" property="pleamountnum" />
+  </resultMap>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select *
+    from RECANDAPPFORM
+    where CASENUM = #{casenum,jdbcType=VARCHAR}
+  </select>
+</mapper>

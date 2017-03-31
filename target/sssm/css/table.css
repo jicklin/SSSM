@@ -1,0 +1,77 @@
+table {
+	width: 70%;
+	border-collapse: collapse;
+	border-spacing: 0;
+	font-size: 12px;
+	margin: 0 15%;
+	color: #000000;
+}
+
+table tr td { /*height:35px;*/
+	border: 1px solid #909194;
+}
+
+table tr td label {
+	font-weight:normal;
+}
+
+.customThead {
+	background-color: #E2F1FD;
+	text-align: center;
+}
+
+/******隐藏的单元格套用此css*****/
+.hidden {
+	border: none;
+}
+
+table tr td input {
+	margin-left: 0px;
+	width: 97%;
+	border: none;
+}
+
+table tr td input[type="checkbox"] {
+	width: auto;
+	height: auto;
+	vertical-align: middle;
+}
+
+table tr td select {
+	width: 99%;
+	border: none;
+}
+
+table tr td textarea {
+	width: 90%;
+	border: none;
+	overflow: hidden;
+}
+
+table tr td img {
+	width: 100%;
+	border: none;
+	height: 100%;
+}
+
+.spanUrl {
+	margin: 2px 3px;
+	float: right;
+	border: 1px solid #909194;
+	width: 15%;
+	text-align: center;
+	background-color: #E2E1FD;
+	cursor: pointer;
+}
+
+.coverTitle{
+	text-align:center;
+	padding: 20px;
+}
+
+.coverText{
+	text-align:center;
+	font-size:20px;
+	padding: 10px;
+}
+

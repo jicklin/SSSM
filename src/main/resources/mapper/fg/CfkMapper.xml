@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jiajia.dao.fg.CfkMapper" >
+  <resultMap id="BaseResultMap" type="com.jiajia.entity.fg.Cfk" >
+    <id column="proid" property="proid" jdbcType="NVARCHAR" />
+    <result column="KEYCODE" property="keycode" jdbcType="CHAR" />
+    <result column="CFCODE" property="cfcode" jdbcType="NVARCHAR" />
+    <result column="UNITNAME" property="unitname" jdbcType="NVARCHAR" />
+    <result column="CFFOR" property="cffor" jdbcType="NVARCHAR" />
+    <result column="CFDATE" property="cfdate" jdbcType="TIMESTAMP" />
+    <result column="OCERTNO" property="ocertno" jdbcType="NVARCHAR" />
+    <result column="JFDATE" property="jfdate" jdbcType="TIMESTAMP" />
+    <result column="JFSIGN" property="jfsign" jdbcType="INTEGER" />
+    <result column="fwh" property="fwh" jdbcType="NVARCHAR" />
+    <result column="cfqsrq" property="cfqsrq" jdbcType="TIMESTAMP" />
+    <result column="yjjfrq" property="yjjfrq" jdbcType="TIMESTAMP" />
+    <result column="jbr" property="jbr" jdbcType="NVARCHAR" />
+    <result column="jbrsfz" property="jbrsfz" jdbcType="NVARCHAR" />
+    <result column="jbrlxfs" property="jbrlxfs" jdbcType="NVARCHAR" />
+    <result column="cfdjr" property="cfdjr" jdbcType="NVARCHAR" />
+    <result column="jfr" property="jfr" jdbcType="NVARCHAR" />
+    <result column="jfrq" property="jfrq" jdbcType="TIMESTAMP" />
+    <result column="jfdjr" property="jfdjr" jdbcType="NVARCHAR" />
+    <result column="bz" property="bz" jdbcType="NVARCHAR" />
+    <result column="lhsx" property="lhsx" jdbcType="INTEGER" />
+    <result column="jfbz" property="jfbz" jdbcType="NVARCHAR" />
+    <result column="xgdate" property="xgdate" jdbcType="TIMESTAMP" />
+    <result column="jfrsfz" property="jfrsfz" jdbcType="NVARCHAR" />
+    <result column="jfrlxfs" property="jfrlxfs" jdbcType="NVARCHAR" />
+    <result column="cfwj" property="cfwj" jdbcType="NVARCHAR" />
+    <result column="jfwj" property="jfwj" jdbcType="NVARCHAR" />
+    <result column="jffwh" property="jffwh" jdbcType="NVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    proid, KEYCODE, CFCODE, UNITNAME, CFFOR, CFDATE, OCERTNO, JFDATE, JFSIGN, fwh, cfqsrq, 
+    yjjfrq, jbr, jbrsfz, jbrlxfs, cfdjr, jfr, jfrq, jfdjr, bz, lhsx, jfbz, xgdate, jfrsfz, 
+    jfrlxfs, cfwj, jfwj, jffwh
+  </sql>
+  <select id="selectAll" resultMap="BaseResultMap">
+    SELECT *
+    FROM CFK
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from CFK
+    where proid = #{proid,jdbcType=NVARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from CFK
+    where proid = #{proid,jdbcType=NVARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.jiajia.entity.fg.Cfk" >
+    insert into CFK (proid, KEYCODE, CFCODE, 
+      UNITNAME, CFFOR, CFDATE, 
+      OCERTNO, JFDATE, JFSIGN, 
+      fwh, cfqsrq, yjjfrq, 
+      jbr, jbrsfz, jbrlxfs, 
+      cfdjr, jfr, jfrq, 
+      jfdjr, bz, lhsx, 
+      jfbz, xgdate, jfrsfz, 
+      jfrlxfs, cfwj, jfwj, 
+      jffwh)
+    values (#{proid,jdbcType=NVARCHAR}, #{keycode,jdbcType=CHAR}, #{cfcode,jdbcType=NVARCHAR}, 
+      #{unitname,jdbcType=NVARCHAR}, #{cffor,jdbcType=NVARCHAR}, #{cfdate,jdbcType=TIMESTAMP}, 
+      #{ocertno,jdbcType=NVARCHAR}, #{jfdate,jdbcType=TIMESTAMP}, #{jfsign,jdbcType=INTEGER}, 
+      #{fwh,jdbcType=NVARCHAR}, #{cfqsrq,jdbcType=TIMESTAMP}, #{yjjfrq,jdbcType=TIMESTAMP}, 
+      #{jbr,jdbcType=NVARCHAR}, #{jbrsfz,jdbcType=NVARCHAR}, #{jbrlxfs,jdbcType=NVARCHAR}, 
+      #{cfdjr,jdbcType=NVARCHAR}, #{jfr,jdbcType=NVARCHAR}, #{jfrq,jdbcType=TIMESTAMP}, 
+      #{jfdjr,jdbcType=NVARCHAR}, #{bz,jdbcType=NVARCHAR}, #{lhsx,jdbcType=INTEGER}, 
+      #{jfbz,jdbcType=NVARCHAR}, #{xgdate,jdbcType=TIMESTAMP}, #{jfrsfz,jdbcType=NVARCHAR}, 
+      #{jfrlxfs,jdbcType=NVARCHAR}, #{cfwj,jdbcType=NVARCHAR}, #{jfwj,jdbcType=NVARCHAR}, 
+      #{jffwh,jdbcType=NVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jiajia.entity.fg.Cfk" >
+    insert into CFK
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="proid != null" >
+        proid,
+      </if>
+      <if test="keycode != null" >
+        KEYCODE,
+      </if>
+      <if test="cfcode != null" >
+        CFCODE,
+      </if>
+      <if test="unitname != null" >
+        UNITNAME,
+      </if>
+      <if test="cffor != null" >
+        CFFOR,
+      </if>
+      <if test="cfdate != null" >
+        CFDATE,
+      </if>
+      <if test="ocertno != null" >
+        OCERTNO,
+      </if>
+      <if test="jfdate != null" >
+        JFDATE,
+      </if>
+      <if test="jfsign != null" >
+        JFSIGN,
+      </if>
+      <if test="fwh != null" >
+        fwh,
+      </if>
+      <if test="cfqsrq != null" >
+        cfqsrq,
+      </if>
+      <if test="yjjfrq != null" >
+        yjjfrq,
+      </if>
+      <if test="jbr != null" >
+        jbr,
+      </if>
+      <if test="jbrsfz != null" >
+        jbrsfz,
+      </if>
+      <if test="jbrlxfs != null" >
+        jbrlxfs,
+      </if>
+      <if test="cfdjr != null" >
+        cfdjr,
+      </if>
+      <if test="jfr != null" >
+        jfr,
+      </if>
+      <if test="jfrq != null" >
+        jfrq,
+      </if>
+      <if test="jfdjr != null" >
+        jfdjr,
+      </if>
+      <if test="bz != null" >
+        bz,
+      </if>
+      <if test="lhsx != null" >
+        lhsx,
+      </if>
+      <if test="jfbz != null" >
+        jfbz,
+      </if>
+      <if test="xgdate != null" >
+        xgdate,
+      </if>
+      <if test="jfrsfz != null" >
+        jfrsfz,
+      </if>
+      <if test="jfrlxfs != null" >
+        jfrlxfs,
+      </if>
+      <if test="cfwj != null" >
+        cfwj,
+      </if>
+      <if test="jfwj != null" >
+        jfwj,
+      </if>
+      <if test="jffwh != null" >
+        jffwh,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="proid != null" >
+        #{proid,jdbcType=NVARCHAR},
+      </if>
+      <if test="keycode != null" >
+        #{keycode,jdbcType=CHAR},
+      </if>
+      <if test="cfcode != null" >
+        #{cfcode,jdbcType=NVARCHAR},
+      </if>
+      <if test="unitname != null" >
+        #{unitname,jdbcType=NVARCHAR},
+      </if>
+      <if test="cffor != null" >
+        #{cffor,jdbcType=NVARCHAR},
+      </if>
+      <if test="cfdate != null" >
+        #{cfdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ocertno != null" >
+        #{ocertno,jdbcType=NVARCHAR},
+      </if>
+      <if test="jfdate != null" >
+        #{jfdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="jfsign != null" >
+        #{jfsign,jdbcType=INTEGER},
+      </if>
+      <if test="fwh != null" >
+        #{fwh,jdbcType=NVARCHAR},
+      </if>
+      <if test="cfqsrq != null" >
+        #{cfqsrq,jdbcType=TIMESTAMP},
+      </if>
+      <if test="yjjfrq != null" >
+        #{yjjfrq,jdbcType=TIMESTAMP},
+      </if>
+      <if test="jbr != null" >
+        #{jbr,jdbcType=NVARCHAR},
+      </if>
+      <if test="jbrsfz != null" >
+        #{jbrsfz,jdbcType=NVARCHAR},
+      </if>
+      <if test="jbrlxfs != null" >
+        #{jbrlxfs,jdbcType=NVARCHAR},
+      </if>
+      <if test="cfdjr != null" >
+        #{cfdjr,jdbcType=NVARCHAR},
+      </if>
+      <if test="jfr != null" >
+        #{jfr,jdbcType=NVARCHAR},
+      </if>
+      <if test="jfrq != null" >
+        #{jfrq,jdbcType=TIMESTAMP},
+      </if>
+      <if test="jfdjr != null" >
+        #{jfdjr,jdbcType=NVARCHAR},
+      </if>
+      <if test="bz != null" >
+        #{bz,jdbcType=NVARCHAR},
+      </if>
+      <if test="lhsx != null" >
+        #{lhsx,jdbcType=INTEGER},
+      </if>
+      <if test="jfbz != null" >
+        #{jfbz,jdbcType=NVARCHAR},
+      </if>
+      <if test="xgdate != null" >
+        #{xgdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="jfrsfz != null" >
+        #{jfrsfz,jdbcType=NVARCHAR},
+      </if>
+      <if test="jfrlxfs != null" >
+        #{jfrlxfs,jdbcType=NVARCHAR},
+      </if>
+      <if test="cfwj != null" >
+        #{cfwj,jdbcType=NVARCHAR},
+      </if>
+      <if test="jfwj != null" >
+        #{jfwj,jdbcType=NVARCHAR},
+      </if>
+      <if test="jffwh != null" >
+        #{jffwh,jdbcType=NVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jiajia.entity.fg.Cfk" >
+    update CFK
+    <set >
+      <if test="keycode != null" >
+        KEYCODE = #{keycode,jdbcType=CHAR},
+      </if>
+      <if test="cfcode != null" >
+        CFCODE = #{cfcode,jdbcType=NVARCHAR},
+      </if>
+      <if test="unitname != null" >
+        UNITNAME = #{unitname,jdbcType=NVARCHAR},
+      </if>
+      <if test="cffor != null" >
+        CFFOR = #{cffor,jdbcType=NVARCHAR},
+      </if>
+      <if test="cfdate != null" >
+        CFDATE = #{cfdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ocertno != null" >
+        OCERTNO = #{ocertno,jdbcType=NVARCHAR},
+      </if>
+      <if test="jfdate != null" >
+        JFDATE = #{jfdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="jfsign != null" >
+        JFSIGN = #{jfsign,jdbcType=INTEGER},
+      </if>
+      <if test="fwh != null" >
+        fwh = #{fwh,jdbcType=NVARCHAR},
+      </if>
+      <if test="cfqsrq != null" >
+        cfqsrq = #{cfqsrq,jdbcType=TIMESTAMP},
+      </if>
+      <if test="yjjfrq != null" >
+        yjjfrq = #{yjjfrq,jdbcType=TIMESTAMP},
+      </if>
+      <if test="jbr != null" >
+        jbr = #{jbr,jdbcType=NVARCHAR},
+      </if>
+      <if test="jbrsfz != null" >
+        jbrsfz = #{jbrsfz,jdbcType=NVARCHAR},
+      </if>
+      <if test="jbrlxfs != null" >
+        jbrlxfs = #{jbrlxfs,jdbcType=NVARCHAR},
+      </if>
+      <if test="cfdjr != null" >
+        cfdjr = #{cfdjr,jdbcType=NVARCHAR},
+      </if>
+      <if test="jfr != null" >
+        jfr = #{jfr,jdbcType=NVARCHAR},
+      </if>
+      <if test="jfrq != null" >
+        jfrq = #{jfrq,jdbcType=TIMESTAMP},
+      </if>
+      <if test="jfdjr != null" >
+        jfdjr = #{jfdjr,jdbcType=NVARCHAR},
+      </if>
+      <if test="bz != null" >
+        bz = #{bz,jdbcType=NVARCHAR},
+      </if>
+      <if test="lhsx != null" >
+        lhsx = #{lhsx,jdbcType=INTEGER},
+      </if>
+      <if test="jfbz != null" >
+        jfbz = #{jfbz,jdbcType=NVARCHAR},
+      </if>
+      <if test="xgdate != null" >
+        xgdate = #{xgdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="jfrsfz != null" >
+        jfrsfz = #{jfrsfz,jdbcType=NVARCHAR},
+      </if>
+      <if test="jfrlxfs != null" >
+        jfrlxfs = #{jfrlxfs,jdbcType=NVARCHAR},
+      </if>
+      <if test="cfwj != null" >
+        cfwj = #{cfwj,jdbcType=NVARCHAR},
+      </if>
+      <if test="jfwj != null" >
+        jfwj = #{jfwj,jdbcType=NVARCHAR},
+      </if>
+      <if test="jffwh != null" >
+        jffwh = #{jffwh,jdbcType=NVARCHAR},
+      </if>
+    </set>
+    where proid = #{proid,jdbcType=NVARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jiajia.entity.fg.Cfk" >
+    update CFK
+    set KEYCODE = #{keycode,jdbcType=CHAR},
+      CFCODE = #{cfcode,jdbcType=NVARCHAR},
+      UNITNAME = #{unitname,jdbcType=NVARCHAR},
+      CFFOR = #{cffor,jdbcType=NVARCHAR},
+      CFDATE = #{cfdate,jdbcType=TIMESTAMP},
+      OCERTNO = #{ocertno,jdbcType=NVARCHAR},
+      JFDATE = #{jfdate,jdbcType=TIMESTAMP},
+      JFSIGN = #{jfsign,jdbcType=INTEGER},
+      fwh = #{fwh,jdbcType=NVARCHAR},
+      cfqsrq = #{cfqsrq,jdbcType=TIMESTAMP},
+      yjjfrq = #{yjjfrq,jdbcType=TIMESTAMP},
+      jbr = #{jbr,jdbcType=NVARCHAR},
+      jbrsfz = #{jbrsfz,jdbcType=NVARCHAR},
+      jbrlxfs = #{jbrlxfs,jdbcType=NVARCHAR},
+      cfdjr = #{cfdjr,jdbcType=NVARCHAR},
+      jfr = #{jfr,jdbcType=NVARCHAR},
+      jfrq = #{jfrq,jdbcType=TIMESTAMP},
+      jfdjr = #{jfdjr,jdbcType=NVARCHAR},
+      bz = #{bz,jdbcType=NVARCHAR},
+      lhsx = #{lhsx,jdbcType=INTEGER},
+      jfbz = #{jfbz,jdbcType=NVARCHAR},
+      xgdate = #{xgdate,jdbcType=TIMESTAMP},
+      jfrsfz = #{jfrsfz,jdbcType=NVARCHAR},
+      jfrlxfs = #{jfrlxfs,jdbcType=NVARCHAR},
+      cfwj = #{cfwj,jdbcType=NVARCHAR},
+      jfwj = #{jfwj,jdbcType=NVARCHAR},
+      jffwh = #{jffwh,jdbcType=NVARCHAR}
+    where proid = #{proid,jdbcType=NVARCHAR}
+  </update>
+</mapper>

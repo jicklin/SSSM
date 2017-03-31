@@ -1,0 +1,300 @@
+/*自定义grid样式  write by hjj at 2015/06/26*/
+	/*************************百分百宽度栅格系统父窗体**************************/
+.container-fluid.custabContainer {
+	height: 88.4%;
+	overflow: auto;
+	/*TRFlag 行标记为absolute,出现滚动条的div必须为relative,
+	否则行标记不会跟着滚动条动*/
+	position:relative;
+	/*border: 1px solid #000000;*/
+}
+@media screen and (max-height : 520px), screen and (max-device-height : 768px) {
+	.container-fluid.custabContainer {
+		height: 83.5%;
+	}
+}
+@media screen and (max-height : 685px) and (min-height : 631px){
+	.container-fluid.custabContainer {
+		height: 87%;
+	}
+}
+@media screen and (max-height : 630px) and (min-height : 521px){
+	.container-fluid.custabContainer {
+		height: 84%;
+	}
+}
+/***********************自定义表格样式,带阴影效果*************************/
+.custab {
+	border: 1px solid #ccc;
+	padding: 5px;
+	margin: 0;
+	box-shadow: 3px 3px 2px #ccc; /*阴影效果*/
+	transition: 0.5s; /*变换延迟*/
+	font-size: 13px;
+	color: #333333;
+	font-family: "Arial", "Microsoft YaHei", "黑体", "宋体", sans-serif;
+}
+
+.custab:hover {
+	box-shadow: 3px 3px 0px transparent;
+	transition: 0.5s;
+}
+
+.custab tbody tr {
+	cursor: pointer;
+	height: 25px;
+}
+
+.custab th {
+	cursor: default;
+	white-space: nowrap;
+	/*因为客户端排序的箭头需要这个属性来定位*/
+	position: relative;
+}
+
+
+/*th上的过滤工具小按钮*/
+/*.custab th div.filterDiv {
+	display: inline;
+}*/
+
+.custab th button.sortBtn,
+.custab th /*div.filterDiv*/ button.filterBtn {
+	width: 20px;
+	height: 20px;
+	padding: 0 0;
+	margin: 0;
+}
+
+.custab th button.filterBtn + ul {
+	position: fixed;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	border-radius:3px;
+	z-index: 100;
+}
+
+.custab th button.filterBtn + ul.scopeUL {
+	padding: 20px 20px;
+	width: 300px;
+}
+.custab th button.filterBtn + ul.chooseUL {
+	padding: 5px 0 5px 0;
+	min-width: 120px;
+	max-height: 400px;
+	overflow-y: auto;
+}
+.custab th button.filterBtn + ul.chooseUL li {
+	list-style-type: none;
+	padding-left: 15px;
+	padding-right: 25px;
+	height: 25px;
+	line-height: 25px;
+	text-align: left;
+}
+.custab th button.filterBtn + ul.chooseUL li.divider {
+	height: 1px;
+	margin: 9px 0;
+	overflow: hidden;
+	background-color: #e5e5e5
+}
+.custab th button.filterBtn + ul.chooseUL li a {
+	text-decoration: none;
+	color: #000;
+	font-weight: normal;
+}
+/*.custab th button.filterBtn + ul.chooseUL li:hover {
+	background-color: #2FA4E7;
+}*/
+.custab th button.filterBtn + ul.chooseUL li:hover a{
+	color: #fff;
+}
+
+/*.custab th ul.dropdown-menu {
+	max-height: 400px;
+	overflow: auto;
+}*/
+
+.custab th /*div.filterDiv*/ button.filterBtn span {
+	font-size: 13px;
+}
+
+.custab th button.sortBtn span {
+	font-size: 12px;
+}
+
+/*.custab th div.filterDiv ul>div {
+	padding: 20px 20px;
+	width: 300px;
+}*/
+
+.table>tbody>tr>td {
+	padding: 5px;
+	/*强制不换行显示*/
+	white-space: nowrap;
+	overflow: hidden;
+	/*超出部分用...显示*/
+	text-overflow:ellipsis;
+	/*设置宽度,否则上面的超出部分不会以...显示*/
+	/*max-width:50px;*/
+}
+
+/*选择一行样式修改 原来f3f3f3*/
+.selected td {
+	background-color: #eee;
+}
+
+.custab tr td.tdClick {
+	text-decoration:underline;
+}
+
+.custab tr.groupItem td {
+	color: #aaa;
+}
+.custab tr td .launchSign {
+	float: left;
+}
+/*客户端排序css样式*/
+.custab th.thClientSort:hover {
+	background-color:#eee;
+}
+.custab th.thClientSort:not(.downSort):before,
+.custab th.thClientSort:not(.downSort):after {
+	content: "";
+	position:absolute;
+	left:45%;
+	bottom:0;
+	border-style:solid dashed dashed;
+	border-color:transparent transparent #aaa;
+	border-width:6px;
+}
+.custab th.thClientSort:not(.downSort):after {
+	border-width:4px;
+	margin-left:2px;
+	margin-bottom:1px;
+	border-color:transparent transparent #FFF;
+}
+.custab th.downSort:before,
+.custab th.downSort:after {
+	content: "";
+	position:absolute;
+	display:block;
+	left:45%;
+	bottom:-6px;
+	border-style:solid dashed dashed;
+	border-color:#aaa transparent transparent ;
+	border-width:6px;
+}
+.custab th.downSort:after {
+	border-width:4px;
+	margin-left:2px;
+	margin-bottom:3px;
+	border-color:#FFF transparent transparent ;
+}
+/*************************右击th选择隐藏/显示列菜单css****************/
+.custab .thMenu{ 
+	min-width:150px;
+	position:absolute;
+	background-color:#fff;
+	border:1px solid #ccc;
+	border-radius:5px;
+	box-shadow: 3px 3px 5px #ccc;
+}
+.custab .thMenuItem {
+	height: 25px;
+	line-height: 25px;
+	margin-top: 2px;
+	cursor : default;
+}
+
+.custab .thMenuItem>span {
+	line-height: 25px;
+	float:right;
+	right: 5px;
+}
+.custab .thMenuItem:hover {
+	background-color: #ccc;
+	color: #fff;
+} 
+.custab .thMenu:before,.thMenu:after{
+	content:"";display:block; 
+	border-width:10px; 
+	position:absolute; top:-20px;
+	left:15px;
+	border-style:solid dashed dashed;
+	border-color:transparent transparent #ccc;
+	font-size:0; 
+	line-height:0;
+}
+.custab .thMenu:after{
+	top:-19px;
+	border-color:transparent transparent #FFF;
+} 
+/**************************自定义分页css样式*************************/
+	/*设置分页的高度*/
+#page .navbar-nav>li>a {
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+#page .navbar-brand {
+	height: 20px;
+	padding-top: 5px;
+}
+
+#page {
+	min-height: 20px;
+	width: 96.8%;
+	left: 15px;
+	bottom:-1px;
+}
+
+#page .navbar-toggle {
+	margin-top: 2px;
+	margin-bottom: 2px;
+}
+
+/*设置分页内输入框样式*/
+#page .navbar-nav>li>input {
+	text-align: center;
+	height: 20px;
+	width: 30px;
+	margin-top: 5px;
+	margin-left: 2px;
+	border: none;
+	border-radius: 3px 3px 3px 3px;
+}
+
+/*设置分页内总数据框样式*/
+#page .navbar-nav>li>div#total {
+	color:white;
+	margin-top:5px;
+	cursor:default;
+}
+
+/*********************************自定义工具栏样式*************************/
+#tools {
+	height: 49px;
+	width: 96.8%;
+	left: 15px;
+	margin: 0 0;
+	-webkit-box-shadow: 3px 0 2px #ccc;
+    -moz-box-shadow: 3px 0 2px #ccc;
+	box-shadow: 3px 0 2px #ccc;
+	border-radius: 0 0 0;
+}
+
+#tools .navbar-collapse>form>div>input,#tools .navbar-collapse>form>button
+	{
+	height: 30px;
+	margin-top: 5px;
+}
+
+.input-group #searchBtn {
+	border-radius:0 30px 30px 0;
+}
+
+#toolsBtn .input-group .selectVal li a {
+	font-family: "Arial", "Microsoft YaHei", "黑体", "宋体", sans-serif;
+	font-size: 12px;
+}

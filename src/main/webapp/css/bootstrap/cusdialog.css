@@ -1,0 +1,226 @@
+/*自定义dialog样式  write by hjj at 2015/06/30*/
+
+.cusdialog .panel-heading {
+	border-bottom: none;
+	position: relative;
+	height: 32px;
+}
+
+.cusdialog .modal-dialog .panel-primary {
+	width: 100%;
+	height: 100%;
+	margin: 0 0;
+}
+
+/*dialog拖曳时的进度条隐藏*/
+.modal-open .modal {
+	overflow: hidden;
+}
+
+/*拖曳div*/
+.resizeDIV {
+	width: 8px;
+	height: 8px;
+	background:#000;
+	overflow:hidden;
+	opacity:0;
+	filter:alpha(opacity=0);
+	position: absolute; 
+}
+
+div#TL {
+	left:0px;
+	top:0px;
+	cursor:nw-resize;
+}
+
+div#BL {
+	left:0px;
+	bottom:0px;
+	cursor:sw-resize;
+}
+
+div#TR {
+	right:0px;
+	top:0px;
+	cursor:ne-resize;
+}
+
+div#BR {
+	right:0px;
+	bottom:0px;
+	cursor:se-resize;
+}
+
+div#left {
+	width:5px;
+	height:100%;
+	left:0px;
+	top:0px;
+	cursor:w-resize;
+}
+
+div#right {
+	width:5px;
+	height:100%;
+	top:0px;
+	right:0px;
+	cursor:w-resize;
+}
+
+div#top {
+	width:100%;
+	height:5px;
+	left:0px;
+	top:0px;
+	cursor:n-resize;
+}
+
+div#bottom {
+	width:100%;
+	height:5px;
+	left:0px;
+	bottom:0px;
+	cursor:n-resize;
+}
+.cusdialog .panel-heading {
+	position: relative;
+	padding: 0;
+}
+.cusdialog .panel-title {
+	position: absolute;
+	left: 0;
+	top: 0;
+	padding: 0;
+	height: 100%;
+	line-height: 200%;
+}
+.cusdialog .cusdialog-tools {
+	position: absolute;
+	right: 0;
+	top: 0;
+	padding: 0;
+}
+.cusdialog .cusdialog-tools .btn {
+	position: relative;
+	height: 32px;
+	top: 0;
+	margin-top: 0;
+	border-top-left-radius: 0;
+	border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0;
+	border-top-right-radius: 0;
+}
+.cusdialog .panel-heading .min {
+	display: none;
+}
+.cusdialog .modal-footer {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	border-top: none;
+	padding: 0;
+}
+
+.cusdialog .modal-footer .btn-group>.btn:first-child {
+	border-bottom-left-radius: 0;
+}
+
+.cusdialog .modal-footer .btn-group>.btn:last-child {
+	border-top-right-radius: 0;
+}
+
+/**************************闪烁字体对话框*****************************/
+
+.flickerDlg {
+	position: absolute;
+	background: #ffffff;
+	border: 1px solid #ddd;
+	border-radius: 5px 5px 5px 5px;
+	z-index: 10000;
+	display: none;
+}
+
+.flickerDlg-header {
+	width:100%;
+	height:30px;
+	border-bottom:1px solid #ddd;
+	line-height:30px;
+	padding-left:5px;
+	color: #2E424A;
+	FILTER: progid:DXImageTransform.Microsoft.Gradient(gradientType=0,startColorStr=#FAFAFA,endColorStr=#E8E8E8); /*IE 6 7 8*/ 
+	background: -ms-linear-gradient(top, #FAFAFA,#E8E8E8);        /* IE 10 */
+	background:-moz-linear-gradient(top,#FAFAFA,#E8E8E8);/*火狐*/ 
+	background:-webkit-gradient(linear, left top, left bottom,from(#FAFAFA),to(#E8E8E8));/*谷歌*/ 
+	background: -webkit-gradient(linear, left top, left bottom, from(#FAFAFA), to(#E8E8E8));      /* Safari 4-5, Chrome 1-9*/
+	background: -webkit-linear-gradient(top, #FAFAFA,#E8E8E8);   /*Safari5.1 Chrome 10+*/
+	background: -o-linear-gradient(top, #FAFAFA,#E8E8E8);  /*Opera 11.10+*/
+}
+
+.flickerDlg-header .btn {
+	border: none;
+	border-radius: 0 0 0;
+	border-bottom:1px solid #ddd;
+}
+.flickerDlg-header .btn-default {
+	FILTER: progid:DXImageTransform.Microsoft.Gradient(gradientType=0,startColorStr=#FAFAFA,endColorStr=#E8E8E8); /*IE 6 7 8*/ 
+	background: -ms-linear-gradient(top, #FAFAFA,#E8E8E8);        /* IE 10 */
+	background:-moz-linear-gradient(top,#FAFAFA,#E8E8E8);/*火狐*/ 
+	background:-webkit-gradient(linear, left top, left bottom,from(#FAFAFA),to(#E8E8E8));/*谷歌*/ 
+	background: -webkit-gradient(linear, left top, left bottom, from(#FAFAFA), to(#E8E8E8));      /* Safari 4-5, Chrome 1-9*/
+	background: -webkit-linear-gradient(top, #FAFAFA,#E8E8E8);   /*Safari5.1 Chrome 10+*/
+	background: -o-linear-gradient(top, #FAFAFA,#E8E8E8);  /*Opera 11.10+*/
+}
+.flickerDlg-header .btn-default:hover {
+	FILTER: progid:DXImageTransform.Microsoft.Gradient(gradientType=0,startColorStr=#E8E8E8,endColorStr=#DDDDDD); /*IE 6 7 8*/ 
+	background: -ms-linear-gradient(top, #E8E8E8,#DDDDDD);        /* IE 10 */
+	background:-moz-linear-gradient(top,#E8E8E8,#DDDDDD);/*火狐*/ 
+	background:-webkit-gradient(linear, left top, left bottom,from(#E8E8E8),to(#DDDDDD));/*谷歌*/ 
+	background: -webkit-gradient(linear, left top, left bottom, from(#E8E8E8), to(#DDDDDD));      /* Safari 4-5, Chrome 1-9*/
+	background: -webkit-linear-gradient(top, #E8E8E8,#DDDDDD);   /*Safari5.1 Chrome 10+*/
+	background: -o-linear-gradient(top, #E8E8E8,#DDDDDD);  /*Opera 11.10+*/
+}
+
+.flickerDlg-header .max {
+	height: 30px;
+}
+
+.flickerDlg-header .min {
+	height: 30px;
+	display: none;
+}
+
+.flickerDlg-header .remove {
+	height: 30px;
+}
+
+.flickerDlg-header .max .glyphicon {
+	font-size: 17px;
+}
+
+.flickerDlg-header .min .glyphicon {
+	font-size: 17px;
+}
+.flickerDlg-header .remove .glyphicon {
+	font-size: 17px;
+}
+
+.flickerDlg-body {
+	width:100%;
+	height:95%;
+	padding:10px 10px;
+}
+
+#shade-text {
+	position: fixed;
+	color: #ffffff;
+	font-size: 17px;
+	display: none;
+	z-index: 9999;
+}
+
+.iframeShadow {
+	background:#ccc;
+	opacity:0.3;
+	filter:alpha(opacity=0.3);
+}
