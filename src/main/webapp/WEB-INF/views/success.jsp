@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: Administrator
@@ -14,6 +15,25 @@
 <h2>添加用户成功</h2>
 <h2>${requestScope.添加成功}</h2>
 ${requestScope.user}
+
+<br>
+<div>
+    <table class="table table-hover">
+        <thead>
+        <th>姓名</th>
+        <th>身份证号</th>
+        </thead>
+        <tbody>
+        <c:forEach items="${user2}" var="user">
+            <tr>
+                <td>${user.username}</td>
+                <td>${user.certNo}</td>
+            </tr>
+
+        </c:forEach>
+        </tbody>
+    </table>
+</div>
 
 </body>
 </html>
