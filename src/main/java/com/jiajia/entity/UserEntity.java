@@ -8,7 +8,6 @@ import java.io.Serializable;
 public class UserEntity implements Serializable {
     private String username;//用户名
     private String certNo;//用户密码
-    private String id;
 
     public String getUsername() {
         return username;
