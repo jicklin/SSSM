@@ -1,10 +1,17 @@
 package com.jiajia.dao.bd;
 
 import com.jiajia.entity.bd.Recandappform;
-import org.springframework.stereotype.Repository;
 
 public interface RecandappformMapper {
+    int deleteByPrimaryKey(String casenum);
+
+    int insert(Recandappform record);
+
+    int insertSelective(Recandappform record);
 
     Recandappform selectByPrimaryKey(String casenum);
 
+    int updateByPrimaryKeySelective(Recandappform record);
+
+    int updateByPrimaryKey(Recandappform record);
 }

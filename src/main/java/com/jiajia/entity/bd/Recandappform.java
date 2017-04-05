@@ -1,10 +1,9 @@
 package com.jiajia.entity.bd;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class Recandappform implements Serializable {
+public class Recandappform {
     private String casenum;
 
     private String bustype;

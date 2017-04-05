@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiajia.dao.bd.HouseroomMapper">
+  <resultMap id="BaseResultMap" type="com.jiajia.entity.bd.Houseroom">
+    <id column="HOUSEROOMID" jdbcType="VARCHAR" property="houseroomid" />
+    <result column="HOUSEFLOORID" jdbcType="VARCHAR" property="housefloorid" />
+    <result column="HOUSEROOMNEWID" jdbcType="VARCHAR" property="houseroomnewid" />
+    <result column="REALEUNUM" jdbcType="VARCHAR" property="realeunum" />
+    <result column="BUILDINGID" jdbcType="VARCHAR" property="buildingid" />
+    <result column="HRNUM" jdbcType="VARCHAR" property="hrnum" />
+    <result column="GISBLDNUM" jdbcType="VARCHAR" property="gisbldnum" />
+    <result column="BLDNUM" jdbcType="VARCHAR" property="bldnum" />
+    <result column="FLOORNUM" jdbcType="VARCHAR" property="floornum" />
+    <result column="ROOMNUM" jdbcType="DECIMAL" property="roomnum" />
+    <result column="ROOMNAME" jdbcType="VARCHAR" property="roomname" />
+    <result column="ROOMLOCATION" jdbcType="VARCHAR" property="roomlocation" />
+    <result column="BUILDAREA" jdbcType="DECIMAL" property="buildarea" />
+    <result column="ROOMAREA" jdbcType="DECIMAL" property="roomarea" />
+    <result column="SHAREAREA" jdbcType="DECIMAL" property="sharearea" />
+    <result column="AREAUNIT" jdbcType="VARCHAR" property="areaunit" />
+    <result column="FACTINFLO" jdbcType="DECIMAL" property="factinflo" />
+    <result column="ROOMMODE" jdbcType="VARCHAR" property="roommode" />
+    <result column="ROOMSTRUCT" jdbcType="VARCHAR" property="roomstruct" />
+    <result column="HOUSETYPE" jdbcType="VARCHAR" property="housetype" />
+    <result column="HOUSEPROPERTY" jdbcType="VARCHAR" property="houseproperty" />
+    <result column="HRUSE" jdbcType="VARCHAR" property="hruse" />
+    <result column="HRUSE2" jdbcType="VARCHAR" property="hruse2" />
+    <result column="HRUSE3" jdbcType="VARCHAR" property="hruse3" />
+    <result column="PREBUILDAREA" jdbcType="DECIMAL" property="prebuildarea" />
+    <result column="PREROOMAREA" jdbcType="DECIMAL" property="preroomarea" />
+    <result column="PRESHAREAREA" jdbcType="DECIMAL" property="presharearea" />
+    <result column="PREBLDUNDAREA" jdbcType="DECIMAL" property="prebldundarea" />
+    <result column="PREOTHERAREA" jdbcType="DECIMAL" property="preotherarea" />
+    <result column="PRESHARERATE" jdbcType="DECIMAL" property="presharerate" />
+    <result column="BLDUNDAREA" jdbcType="DECIMAL" property="bldundarea" />
+    <result column="OTHERAREA" jdbcType="DECIMAL" property="otherarea" />
+    <result column="SHARERATE" jdbcType="DECIMAL" property="sharerate" />
+    <result column="PUBLANDAREA" jdbcType="DECIMAL" property="publandarea" />
+    <result column="OWNLANDAREA" jdbcType="DECIMAL" property="ownlandarea" />
+    <result column="SHARELANDAREA" jdbcType="DECIMAL" property="sharelandarea" />
+    <result column="ISPUBLIC" jdbcType="DECIMAL" property="ispublic" />
+    <result column="ISSUBROOM" jdbcType="DECIMAL" property="issubroom" />
+    <result column="ROOMSTATE" jdbcType="DECIMAL" property="roomstate" />
+    <result column="SALESTATE" jdbcType="DECIMAL" property="salestate" />
+    <result column="PLESTATE" jdbcType="DECIMAL" property="plestate" />
+    <result column="PROSTATE" jdbcType="DECIMAL" property="prostate" />
+    <result column="LIMSTATE" jdbcType="DECIMAL" property="limstate" />
+    <result column="HRDESC" jdbcType="OTHER" property="hrdesc" />
+    <result column="DOSTATE" jdbcType="DECIMAL" property="dostate" />
+    <result column="HOUSEINROOMID" jdbcType="VARCHAR" property="houseinroomid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    HOUSEROOMID, HOUSEFLOORID, HOUSEROOMNEWID, REALEUNUM, BUILDINGID, HRNUM, GISBLDNUM, 
+    BLDNUM, FLOORNUM, ROOMNUM, ROOMNAME, ROOMLOCATION, BUILDAREA, ROOMAREA, SHAREAREA, 
+    AREAUNIT, FACTINFLO, ROOMMODE, ROOMSTRUCT, HOUSETYPE, HOUSEPROPERTY, HRUSE, HRUSE2, 
+    HRUSE3, PREBUILDAREA, PREROOMAREA, PRESHAREAREA, PREBLDUNDAREA, PREOTHERAREA, PRESHARERATE, 
+    BLDUNDAREA, OTHERAREA, SHARERATE, PUBLANDAREA, OWNLANDAREA, SHARELANDAREA, ISPUBLIC, 
+    ISSUBROOM, ROOMSTATE, SALESTATE, PLESTATE, PROSTATE, LIMSTATE, HRDESC, DOSTATE, HOUSEINROOMID
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from HOUSEROOM
+    where HOUSEROOMID = #{houseroomid,jdbcType=VARCHAR}
+  </select>
+
+</mapper>

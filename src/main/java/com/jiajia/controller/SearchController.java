@@ -1,12 +1,17 @@
 package com.jiajia.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.jiajia.entity.DataRequest;
+import com.jiajia.entity.DataResponse;
 import com.jiajia.entity.UserEntity;
+import com.jiajia.entity.bd.Houseroom;
+import com.jiajia.service.HouseroomService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,18 +22,28 @@ import java.util.List;
 @Controller
 @RequestMapping("/search")
 public class SearchController {
+    @Autowired
+    private HouseroomService houseroomService;
 
-    @RequestMapping("/family")
+    @RequestMapping(value="/family/{jsonStr}",method = RequestMethod.GET)
     @ResponseBody
-    public String testSearch(@RequestBody List<UserEntity> users, Model model) {
+    public DataResponse<Houseroom> testSearch(@PathVariable("jsonStr") String jsonStr , DataRequest request, Model model) {
         String result = "";
-        if (users == null || users.size() == 0) {
-            return "没有记录";
-        }
-        model.addAttribute("users",users);
-        result = JSON.toJSONString(users);
+        List<UserEntity> users=JSON.parseArray(jsonStr,UserEntity.class);
+        int count;//总记录数
+        int limit = request.getRows() <= 0 ? 20 : request.getRows();//每页显示数量
+        int totalPages;//总页数
+        int page = request.getPage() <= 0 ? 1 : request.getPage();//当前显示页码
+        List<Houseroom> list=new ArrayList<Houseroom>();
+        DataResponse<Houseroom> response=new DataResponse<Houseroom>();
+        Houseroom room=houseroomService.getByPrimaryKey("ABAC583922D7446591234E1BDAA354DD");
+        list.add(room);
+        response.setRecords(1);
+        response.setTotal(1);
+        response.setPage(1);
+        response.setRows(list);
         System.out.println(result);
-        return result;
+        return response;
 
 
     }

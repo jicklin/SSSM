@@ -4,9 +4,16 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="css/jqgrid/jquery-ui.min.css">
+    <link type="text/css" rel="stylesheet" href="css/jqgrid/ui.jqgrid.css">
     <title>Search</title>
-    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
     <script type="text/javascript" src="js/bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/jqgrid/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="js/jqgrid/i18n/grid.locale-cn.js"></script>
+    <script type="text/javascript" src="js/jqgrid/jquery.jqGrid.min.js"></script>
+
     <!-- 标示 -->
     <script type="text/javascript">
         (function ($) {
@@ -66,7 +73,7 @@
         }
         function submitUserList() {
             var jsonStr = $("#form1").serializeJson();
-            //console.log(jsonStr);
+           /* //console.log(jsonStr);
             $.ajax({
                 url: "search/family",
                 type: "POST",
@@ -79,7 +86,43 @@
                 error: function (res) {
                     alert(res.responseText);
                 }
+            });*/
+            showFCList(jsonStr);
+        }
+        function showFCList(jsonStr){
+            $("#list1").jqGrid({
+                url:"search/family/"+jsonStr,
+                //postdata:jsonStr,
+                ajaxGridOptions: { contentType: 'application/json; charset=utf-8' },
+                datatype:"json", //数据来源，本地数据
+                mtype:"GET",//提交方式
+                prmNames : {search : "search"},
+                height:420,//高度，表格高度。可为数值、百分比或'auto'
+                //width:1000,//这个宽度不能为百分比
+                autowidth:true,//自动宽
+                colNames:['房屋编号', '坐落', '面积','用途','业务号'],
+                colModel:[
+                    //{name:'id',index:'id', width:'10%', align:'center' },
+                    {name:'realeunum',index:'realeunum', width:'20%',align:'center'},
+                    {name:'roomlocation',index:'roomlocation', width:'25%',align:'center'},
+                    {name:'buildarea',index:'buildarea', width:'20%', align:"center"},
+                    {name:'roomstruct',index:'roomstruct', width:'10%', align:"left", sortable:false},
+                    {name:'hruse',index:'hruse', width:'10%',align:"center", sortable:false}
+                ],
+                rownumbers:true,//添加左侧行号
+                //altRows:true,//设置为交替行表格,默认为false
+                //sortname:'createDate',
+                //sortorder:'asc',
+                viewrecords: true,//是否在浏览导航栏显示记录总数
+                rowNum:15,//每页显示记录数
+                rowList:[15,20,25],//用于改变显示行数的下拉列表框的元素数组。
+                jsonReader:{
+                    id: "blackId",//设置返回参数中，表格ID的名字为blackId
+                    repeatitems : false
+                },
+                pager:$('#gridPager')
             });
+
         }
 
     </script>
@@ -108,27 +151,34 @@
                     </ul>
                 </form>
             </fieldset>
+            <fieldset>
+                <legend>模糊搜索</legend>
+                <form id="form2">
+                    <table class="vertical-custable">
+                        <tr>
+                            <td class="cusThead">坐落：</td>
+                            <td colspan="2"><input type="text" id="location" name="location"></td>
+                            <td class="cusThead">产权证号：</td>
+                            <td colspan="2"><input type="text" id="ocertno" name="ocertno"></td>
+                        </tr>
+                    </table>
+                </form>
+            </fieldset>
 
             <input type="button" value="Search" onclick="submitUserList();">
 
         </div>
     </div>
-    <div>
-        <table class="table table-hover">
-            <thead>
-            <th>姓名</th>
-            <th>身份证号</th>
-            </thead>
-            <tbody>
-            <c:forEach items="${users2}" var="user">
-                <tr>
-                    <td>${user.username}</td>
-                    <td>${user.certNo}</td>
-                </tr>
-
-            </c:forEach>
-            </tbody>
-        </table>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">房产列表</h3>
+        </div>
+        <div class="panel-body">
+            <!-- jqGrid table list4 -->
+            <table id="list1"></table>
+            <!-- jqGrid 分页 div gridPager -->
+            <div id="gridPager"></div>
+        </div>
     </div>
     <a href="search/family2">jstl Test</a>
 </div>
