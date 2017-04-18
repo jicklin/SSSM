@@ -64,4 +64,15 @@
     where HOUSEROOMID = #{houseroomid,jdbcType=VARCHAR}
   </select>
 
+  <select id="selectAll" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM HOUSEROOM
+  </select>
+
+  <select id="countAll" resultType="int">
+    SELECT COUNT(*)
+    FROM HOUSEROOM
+  </select>
+
 </mapper>

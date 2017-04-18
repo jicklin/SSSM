@@ -16,7 +16,7 @@ import java.util.List;
  * Created by Administrator on 2017-03-29.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:spring/spring-mybatis.xml", "classpath:spring/spring-mvc.xml","classpath:spring/spring-redis.xml"})
+@ContextConfiguration(locations = {"classpath:spring/spring-mybatis.xml", "classpath:spring/spring-mvc.xml", "classpath:spring/spring-redis.xml"})
 public class CfkServiceTest {
     @Autowired
     private CfkService cfkService;

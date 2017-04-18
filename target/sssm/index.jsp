@@ -1,16 +1,16 @@
+<!DOCTYPE html>
 <html>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.min.css">
-    <link type="text/css" rel="stylesheet" href="css/jqgrid/jquery-ui.min.css">
     <link type="text/css" rel="stylesheet" href="css/jqgrid/ui.jqgrid.css">
+    <link type="text/css" rel="stylesheet" href="css/jqgrid/jquery-ui.theme.min.css">
     <title>Search</title>
-    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-    <script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
+    <script  type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery-migrate-1.2.1.js"></script>
     <script type="text/javascript" src="js/bootstrap/bootstrap.min.js"></script>
-    <script type="text/javascript" src="js/jqgrid/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/jqgrid/i18n/grid.locale-cn.js"></script>
     <script type="text/javascript" src="js/jqgrid/jquery.jqGrid.min.js"></script>
 
@@ -97,20 +97,21 @@
                 datatype:"json", //数据来源，本地数据
                 mtype:"GET",//提交方式
                 prmNames : {search : "search"},
-                height:420,//高度，表格高度。可为数值、百分比或'auto'
+                height:300,//高度，表格高度。可为数值、百分比或'auto'
                 //width:1000,//这个宽度不能为百分比
                 autowidth:true,//自动宽
+                multiselect: true,
                 colNames:['房屋编号', '坐落', '面积','用途','业务号'],
                 colModel:[
                     //{name:'id',index:'id', width:'10%', align:'center' },
                     {name:'realeunum',index:'realeunum', width:'20%',align:'center'},
                     {name:'roomlocation',index:'roomlocation', width:'25%',align:'center'},
-                    {name:'buildarea',index:'buildarea', width:'20%', align:"center"},
-                    {name:'roomstruct',index:'roomstruct', width:'10%', align:"left", sortable:false},
-                    {name:'hruse',index:'hruse', width:'10%',align:"center", sortable:false}
+                    {name:'buildarea',index:'buildarea', width:'20%', align:"center", sortable:true},
+                    {name:'roomstruct',index:'roomstruct', width:'10%', align:"center"},
+                    {name:'hruse',index:'hruse', width:'10%',align:"center"}
                 ],
                 rownumbers:true,//添加左侧行号
-                //altRows:true,//设置为交替行表格,默认为false
+                altRows:true,//设置为交替行表格,默认为false
                 //sortname:'createDate',
                 //sortorder:'asc',
                 viewrecords: true,//是否在浏览导航栏显示记录总数
@@ -121,6 +122,29 @@
                     repeatitems : false
                 },
                 pager:$('#gridPager')
+            });
+            $("#list1").jqGrid('navGrid','#gridPager',{edit:true,add:true,del:true,view:true});
+            jQuery("#list1").jqGrid('navButtonAdd','#gridPager',{
+                caption: "打印",
+                buttonicon:"ui-icon-print",
+                title: "选择要的列",
+                onClickButton : function (){
+                    jQuery("#list1").jqGrid('columnChooser');
+                }
+
+            }).navSeparatorAdd("#gridPager",{sepclass : "ui-separator",sepcontent: ''}).navButtonAdd('#gridPager',{
+                caption:"",
+                title:"导出数据",
+                buttonicon:"ui-icon-disk",
+                onClickButton: function(){
+                    alert("您没有选择一行，将导出所有数据");
+                },
+                position:"last"
+            }).navButtonAdd('#gridPager',{
+                caption:"",
+                title:"哈哈",
+                buttonicon:"ui-icon-print",
+
             });
 
         }

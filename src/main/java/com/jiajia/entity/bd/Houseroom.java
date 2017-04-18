@@ -1,8 +1,9 @@
 package com.jiajia.entity.bd;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class Houseroom {
+public class Houseroom implements Serializable{
     private String houseroomid;
 
     private String housefloorid;
